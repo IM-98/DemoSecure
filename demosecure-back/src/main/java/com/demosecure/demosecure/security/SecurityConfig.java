@@ -42,8 +42,9 @@ public class SecurityConfig {
                 //config des authorisations de base sur requetes http
                 .authorizeHttpRequests(
                         (authorize) ->
-                                authorize.requestMatchers("/api/auth/**").permitAll() //acces a tous les user
+                                authorize.requestMatchers("/api/auth/user/**").permitAll()
                                         .requestMatchers("/api/user/**").hasAuthority("USER") //acces a tous les user USER
+                                        .requestMatchers("/api/auth/admin/**").hasAuthority("ADMIN") //acces a tous les user ADMIN
                                         .anyRequest().authenticated() //doit etre authentifie sur chaque request
                 );
         //ajoute un filtre pour la gestion du token !

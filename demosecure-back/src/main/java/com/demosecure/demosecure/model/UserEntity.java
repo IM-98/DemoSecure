@@ -1,13 +1,17 @@
 package com.demosecure.demosecure.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 
 import java.util.Set;
 
 @Data
+@Builder
+@AllArgsConstructor
 @Entity
-@Table(name = "users", schema = "demosecure", uniqueConstraints = {
+@Table(name = "users", schema = "public", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"username"}),
         @UniqueConstraint(columnNames = {"email"})
 })
@@ -25,4 +29,7 @@ public class UserEntity {
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private Set<RoleEntity> roles;
+
+    public UserEntity() {
+    }
 }

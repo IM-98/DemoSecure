@@ -1,5 +1,7 @@
 package com.demosecure.demosecure.service;
 
+import com.demosecure.demosecure.model.RoleEntity;
+import com.demosecure.demosecure.model.RoleName;
 import com.demosecure.demosecure.model.dto.BearerToken;
 import com.demosecure.demosecure.model.dto.LoginDto;
 import com.demosecure.demosecure.model.dto.SignUpDto;
@@ -13,6 +15,14 @@ public interface IDemoUserSecurityService {
      * @return le BearerToken ou msg d'erreur avec statut en erreur
      */
     ResponseEntity<?> register(SignUpDto rSignUpDto);
+
+    /**
+     * enregistre le nouveau user en base
+     * @param rSignUpDto : donnees en entree
+     * @param rRole : role du user
+     * @return le BearerToken ou msg d'erreur avec statut en erreur
+     */
+    ResponseEntity<?> register(SignUpDto rSignUpDto, RoleName rRole);
 
     /**
      * authentifie le user

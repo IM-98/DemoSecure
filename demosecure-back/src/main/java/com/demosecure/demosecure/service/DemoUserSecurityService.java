@@ -55,7 +55,7 @@ public class DemoUserSecurityService implements IDemoUserSecurityService {
         user.setEmail(rSignUpDto.getEmail());
         user.setPassword(passwordEncoder.encode(rSignUpDto.getPassword()));
 
-        //role admin pour le user
+        //role pour le user
         RoleEntity roles = IRoleRepository.findByName(RoleName.USER).get();
         user.setRoles(Collections.singleton(roles));
 
@@ -64,6 +64,35 @@ public class DemoUserSecurityService implements IDemoUserSecurityService {
 
         //creation du token
         String token = jwtUtilities.generateToken(rSignUpDto.getEmail(), Collections.singletonList(roles.getRoleName()));
+        //renvoi du token dans la reponse
+        return new ResponseEntity<>(new BearerToken(token, TOKEN_TYPE), HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<?> register(SignUpDto rSignUpDto, RoleName rRole) {
+
+        if (IUserRepository.existsByUsername(rSignUpDto.getUsername())) {
+            return new ResponseEntity<>("Username deja pris !", HttpStatus.BAD_REQUEST);
+        }
+
+        //verifie si email existe deja dans la base
+        if (IUserRepository.existsByEmail(rSignUpDto.getEmail())) {
+            return new ResponseEntity<>("Email deja pris !", HttpStatus.BAD_REQUEST);
+        }
+
+        UserEntity user = UserEntity.builder()
+                .username(rSignUpDto.getUsername())
+                .email(rSignUpDto.getEmail())
+                .password(passwordEncoder.encode(rSignUpDto.getPassword()))
+                .roles(Collections.singleton(IRoleRepository.findByName(rRole).get()))
+                .build();
+
+
+        //Sauvegarde le user
+        IUserRepository.save(user);
+
+        //creation du token
+        String token = jwtUtilities.generateToken(rSignUpDto.getEmail(), Collections.singletonList(IRoleRepository.findByName(rRole).get().getRoleName()));
         //renvoi du token dans la reponse
         return new ResponseEntity<>(new BearerToken(token, TOKEN_TYPE), HttpStatus.OK);
     }

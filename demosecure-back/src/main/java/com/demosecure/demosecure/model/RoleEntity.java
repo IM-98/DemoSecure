@@ -10,7 +10,7 @@ import jakarta.persistence.*;
 @Getter
 @Entity
 @NoArgsConstructor
-@Table(name = "roles", schema = "demosecure")
+@Table(name = "roles", schema = "public")
 public class RoleEntity {
 
     @Id

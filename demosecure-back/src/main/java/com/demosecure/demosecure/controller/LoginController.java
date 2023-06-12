@@ -1,5 +1,7 @@
 package com.demosecure.demosecure.controller;
 
+import com.demosecure.demosecure.model.RoleEntity;
+import com.demosecure.demosecure.model.RoleName;
 import com.demosecure.demosecure.model.dto.BearerToken;
 import com.demosecure.demosecure.model.dto.LoginDto;
 import com.demosecure.demosecure.model.dto.SignUpDto;
@@ -20,13 +22,18 @@ public class LoginController {
     @Autowired
     private IDemoUserSecurityService userSecurityService;
 
-    @PostMapping("/signin")
+    @PostMapping("user/signin")
     public BearerToken authenticateUser(@RequestBody LoginDto rLoginDto) {
         return userSecurityService.authenticate(rLoginDto);
     }
 
-    @PostMapping("/signup")
+    @PostMapping("user/signup")
     public ResponseEntity<?> registerUser(@RequestBody SignUpDto rSignUpDto) {
         return userSecurityService.register(rSignUpDto);
+    }
+
+    @PostMapping("admin")
+    public ResponseEntity<?> registerAdmin(@RequestBody SignUpDto rSignUpDto) {
+        return userSecurityService.register(rSignUpDto, RoleName.ADMIN);
     }
 }
