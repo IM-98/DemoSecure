@@ -1,0 +1,33 @@
+<ion-grid [hidden]="hideFormLogin">
+  <ion-row class="ion-justify-content-center">
+      <ion-col class="ion-align-self-center">
+          <div class="ion-padding">
+              <h5>Veuillez-vous connecter...</h5>
+          </div>
+          <div *ngIf="loginForm">
+              <ion-list>
+                  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+                      <ion-item>
+                          <ion-label floating>Login : </ion-label>
+                          <ion-input label="Email" type="email" minlength="5" maxlength="40" formControlName="email"></ion-input>
+                      </ion-item>
+
+                      <ion-item>
+                          <ion-label floating>Mot de passe : </ion-label>
+                          <ion-input label="Password" type="password" minlength="5" maxlength="50" formControlName="password"></ion-input>
+                      </ion-item>
+
+                      <div class="ion-text-center">
+                          <ion-button type="submit" color="primary" [disabled]="submitted">
+                              <span *ngIf="submitted">
+                                      <ion-spinner color="primary"></ion-spinner>
+                                  </span> Connexion
+                          </ion-button>
+                      </div>
+                  </form>
+
+              </ion-list>
+          </div>
+      </ion-col>
+  </ion-row>
+</ion-grid>
