@@ -9,6 +9,9 @@ import {
 } from '@angular/forms';
 import { AlertController, IonicModule } from '@ionic/angular';
 import { TokenService } from 'src/app/services/token.service';
+import {StorageService} from "../../../services/storage.service";
+import {UserServiceService} from "../../../services/user-service.service";
+import {environment} from "../../../../environments/environment";
 
 @Component({
   selector: 'app-login',
@@ -21,11 +24,14 @@ export class LoginComponent implements OnInit {
   loginForm?: UntypedFormGroup;
   submitted = false;
   hideFormLogin: boolean;
+  helloMsg?: string;
 
   constructor(
     public alertCtrl: AlertController,
     private formBuilder: UntypedFormBuilder,
-    private tokenService: TokenService
+    private tokenService: TokenService,
+    private storageService: StorageService,
+    private userService: UserServiceService
   ) {
     //Par defaut on masque le formulaire de login car on va tenter de recuperer les
     //identifiants de connexion avant dans le coffre fort du tel
@@ -34,8 +40,12 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     this.loginForm = this.formBuilder.group({
-      email: ['jon.doe@gmail.com', Validators.required],
-      password: ['johndoe', Validators.required]
+      email: ['', Validators.required],
+      password: ['', Validators.required]
+    });
+    //while form is invalid disable submit button
+    this.loginForm.statusChanges.subscribe((status) => {
+      this.submitted = status === 'INVALID';
     });
   }
 
@@ -60,12 +70,19 @@ export class LoginComponent implements OnInit {
     this.submitted = true; //soumission en cours
     //Appel du service pour la connexion
     this.tokenService.login(email, pass).subscribe({
-      next: (rToken) => console.log('token recupere : %s', rToken),
+      next: (rToken) => this.storageService.set(environment.tokenKey, rToken),
       error: (e) => console.error(e),
       complete: () => {
         console.info('complete');
         this.submitted = false;
       },
+    });
+  }
+
+  hello() {
+    this.userService.hello().subscribe({
+      next: (hello) => this.helloMsg = hello,
+      error: (e) => console.error(e),
     });
   }
 }

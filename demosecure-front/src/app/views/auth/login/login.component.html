@@ -14,7 +14,7 @@
 
                       <ion-item>
                           <ion-label floating>Mot de passe : </ion-label>
-                          <ion-input label="Password" type="password" minlength="5" maxlength="50" formControlName="password"></ion-input>
+                          <ion-input label="Password" type="password" minlength="3" maxlength="50" formControlName="password"></ion-input>
                       </ion-item>
 
                       <div class="ion-text-center">
@@ -27,6 +27,15 @@
                   </form>
 
               </ion-list>
+
+            <div>
+              <ion-button color="primary" (click)="hello()">
+                <span>Say hello</span>
+              </ion-button>
+              <span>
+                {{helloMsg}}
+              </span>
+            </div>
           </div>
       </ion-col>
   </ion-row>

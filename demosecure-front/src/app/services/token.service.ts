@@ -8,7 +8,7 @@ import { environment } from 'src/environments/environment';
 })
 export class TokenService {
 
-  private readonly BASE_URL = `${environment.url_api}/auth`;
+  private readonly BASE_URL = `${environment.url_api}/auth/user`;
 
   constructor(protected http: HttpClient) { }
 
