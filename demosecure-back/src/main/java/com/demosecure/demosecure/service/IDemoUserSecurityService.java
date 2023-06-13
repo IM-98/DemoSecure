@@ -1,6 +1,5 @@
 package com.demosecure.demosecure.service;
 
-import com.demosecure.demosecure.model.RoleEntity;
 import com.demosecure.demosecure.model.RoleName;
 import com.demosecure.demosecure.model.dto.BearerToken;
 import com.demosecure.demosecure.model.dto.LoginDto;
@@ -30,4 +29,12 @@ public interface IDemoUserSecurityService {
      * @return le BearerToken ou erreur d'authentification
      */
     BearerToken authenticate(LoginDto rLoginDto);
+
+
+    /**
+     * met a jour le user
+     * @param rSignUpDto : donnees en entree
+     * @return le BearerToken ou erreur d'authentification
+     */
+    ResponseEntity<?> update(SignUpDto rSignUpDto);
 }

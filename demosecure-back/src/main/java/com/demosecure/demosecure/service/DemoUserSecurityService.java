@@ -2,6 +2,7 @@ package com.demosecure.demosecure.service;
 
 import com.demosecure.demosecure.dao.IRoleRepository;
 import com.demosecure.demosecure.dao.IUserRepository;
+import com.demosecure.demosecure.mappers.UserMapper;
 import com.demosecure.demosecure.model.RoleEntity;
 import com.demosecure.demosecure.model.RoleName;
 import com.demosecure.demosecure.model.UserEntity;
@@ -35,6 +36,9 @@ public class DemoUserSecurityService implements IDemoUserSecurityService {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtilities jwtUtilities;
 
+    private final UserMapper userMapper;
+
+
     private static final String TOKEN_TYPE = "Bearer";
 
     @Override
@@ -49,11 +53,9 @@ public class DemoUserSecurityService implements IDemoUserSecurityService {
             return new ResponseEntity<>("Email deja pris !", HttpStatus.BAD_REQUEST);
         }
 
-        //creation du user en base
-        UserEntity user = new UserEntity();
-        user.setUsername(rSignUpDto.getUsername());
-        user.setEmail(rSignUpDto.getEmail());
-        user.setPassword(passwordEncoder.encode(rSignUpDto.getPassword()));
+        UserEntity user = userMapper.map(rSignUpDto);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+
 
         //role pour le user
         RoleEntity roles = IRoleRepository.findByName(RoleName.USER).get();
@@ -109,6 +111,21 @@ public class DemoUserSecurityService implements IDemoUserSecurityService {
         List<String> rolesNames = new ArrayList<>();
         user.getRoles().forEach(r -> rolesNames.add(r.getRoleName()));
         return new BearerToken(jwtUtilities.generateToken(user.getUsername(), rolesNames), TOKEN_TYPE);
+    }
+
+    @Override
+    public ResponseEntity<?> update(SignUpDto userToUpdate) {
+       if(!IUserRepository.existsByUsername(userToUpdate.getUsername())) {
+           return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+       }
+       else {
+           UserEntity user = IUserRepository.findByEmail(userToUpdate.getEmail()).get();
+           userMapper.updateUserRole(userToUpdate, user);
+           IUserRepository.save(user);
+           return new ResponseEntity<>(HttpStatus.OK);
+       }
+
+
     }
 
 }

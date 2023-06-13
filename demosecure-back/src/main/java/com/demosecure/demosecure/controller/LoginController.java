@@ -1,6 +1,5 @@
 package com.demosecure.demosecure.controller;
 
-import com.demosecure.demosecure.model.RoleEntity;
 import com.demosecure.demosecure.model.RoleName;
 import com.demosecure.demosecure.model.dto.BearerToken;
 import com.demosecure.demosecure.model.dto.LoginDto;
@@ -9,10 +8,7 @@ import com.demosecure.demosecure.service.IDemoUserSecurityService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -36,4 +32,10 @@ public class LoginController {
     public ResponseEntity<?> registerAdmin(@RequestBody SignUpDto rSignUpDto) {
         return userSecurityService.register(rSignUpDto, RoleName.ADMIN);
     }
+
+    @PatchMapping("admin/update")
+    public ResponseEntity<?> updateUser(@RequestBody SignUpDto rSignUpDto) {
+        return userSecurityService.update(rSignUpDto);
+    }
+
 }
