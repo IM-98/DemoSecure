@@ -12,6 +12,7 @@ import { TokenService } from 'src/app/services/token.service';
 import {StorageService} from "../../../services/storage.service";
 import {UserServiceService} from "../../../services/user-service.service";
 import {environment} from "../../../../environments/environment";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-login',
@@ -31,7 +32,8 @@ export class LoginComponent implements OnInit {
     private formBuilder: UntypedFormBuilder,
     private tokenService: TokenService,
     private storageService: StorageService,
-    private userService: UserServiceService
+    private userService: UserServiceService,
+    private router: Router
   ) {
     //Par defaut on masque le formulaire de login car on va tenter de recuperer les
     //identifiants de connexion avant dans le coffre fort du tel
@@ -70,11 +72,16 @@ export class LoginComponent implements OnInit {
     this.submitted = true; //soumission en cours
     //Appel du service pour la connexion
     this.tokenService.login(email, pass).subscribe({
-      next: (rToken) => this.storageService.set(environment.tokenKey, rToken),
+      next: (rToken) => {
+        this.storageService.set(environment.tokenKey, rToken)
+        this.router.navigate(['tabs', 'tab1']); // Effectue la redirection vers l'URL "./tabs/tab1"
+
+      },
       error: (e) => console.error(e),
       complete: () => {
         console.info('complete');
         this.submitted = false;
+
       },
     });
   }

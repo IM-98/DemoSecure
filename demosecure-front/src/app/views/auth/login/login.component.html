@@ -9,12 +9,12 @@
                   <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
                       <ion-item>
                           <ion-label floating>Login : </ion-label>
-                          <ion-input label="Email" type="email" minlength="5" maxlength="40" formControlName="email"></ion-input>
+                          <ion-input label="Email" type="email" minlength="1" maxlength="40" formControlName="email"></ion-input>
                       </ion-item>
 
                       <ion-item>
                           <ion-label floating>Mot de passe : </ion-label>
-                          <ion-input label="Password" type="password" minlength="3" maxlength="50" formControlName="password"></ion-input>
+                          <ion-input label="Password" type="password" minlength="1" maxlength="50" formControlName="password"></ion-input>
                       </ion-item>
 
                       <div class="ion-text-center">

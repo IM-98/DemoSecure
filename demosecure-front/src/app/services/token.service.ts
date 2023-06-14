@@ -9,8 +9,8 @@ import { environment } from 'src/environments/environment';
 export class TokenService {
 
   private readonly BASE_URL = `${environment.url_api}/auth/user`;
-
   constructor(protected http: HttpClient) { }
+  isLogged : boolean = false;
 
   /**
    * Connexion a l'API
@@ -21,6 +21,7 @@ export class TokenService {
   login(email: string, password: string): Observable<string> {
     return this.http.post<{accessToken: string}>(`${this.BASE_URL}/signin`, { usernameOrEmail: email, password})
       .pipe(map(tokenReponse => {
+        this.isLogged = true;
           return tokenReponse.accessToken;
       }),
       catchError((err, caught) => {

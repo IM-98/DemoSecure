@@ -9,6 +9,7 @@ import { AppComponent } from './app/app.component';
 import { environment } from './environments/environment';
 import {IonicStorageModule} from "@ionic/storage-angular";
 import {tokenFnInterceptor} from "./app/security/token-fn.interceptor";
+import {JwtDecodeService} from "./app/security/jwt-decode.service";
 
 if (environment.production) {
   enableProdMode();
@@ -19,7 +20,8 @@ bootstrapApplication(AppComponent, {
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     importProvidersFrom(IonicModule.forRoot({}), IonicStorageModule.forRoot()),
     provideRouter(routes),
-    provideHttpClient(withInterceptors([tokenFnInterceptor]))
+    provideHttpClient(withInterceptors([tokenFnInterceptor])),
+    JwtDecodeService
 
   ],
 });

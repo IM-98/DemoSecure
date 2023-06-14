@@ -114,13 +114,13 @@ public class DemoUserSecurityService implements IDemoUserSecurityService {
     }
 
     @Override
-    public ResponseEntity<?> update(SignUpDto userToUpdate) {
-       if(!IUserRepository.existsByUsername(userToUpdate.getUsername())) {
+    public ResponseEntity<?> update(SignUpDto updatedUser) {
+       if(!IUserRepository.existsByUsername(updatedUser.getUsername())) {
            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
        }
        else {
-           UserEntity user = IUserRepository.findByEmail(userToUpdate.getEmail()).get();
-           userMapper.updateUserRole(userToUpdate, user);
+           UserEntity user = IUserRepository.findByUsername(updatedUser.getUsername()).get();
+           user = userMapper.updateUserRole(user, updatedUser, IRoleRepository);
            IUserRepository.save(user);
            return new ResponseEntity<>(HttpStatus.OK);
        }

@@ -12,6 +12,32 @@
       <ion-title size="large">Tab 3</ion-title>
     </ion-toolbar>
   </ion-header>
+  <div *ngIf="roleForm">
+    <ion-list>
+      <form [formGroup]="roleForm" (ngSubmit)="onSubmit()">
+        <ion-item>
+          <ion-label floating>Login :</ion-label>
+          <ion-input label="Email" type="email" minlength="1" maxlength="40" formControlName="username"></ion-input>
+        </ion-item>
 
+        <ion-item>
+          <ion-label floating>Role :</ion-label>
+          <ion-select formControlName="role">
+            <ion-select-option value="{{role.ADMIN}}">Admin</ion-select-option>
+            <ion-select-option value="{{role.USER}}">User</ion-select-option>
+            <ion-select-option value="{{role.GUEST}}">Guest</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <div class="ion-text-center">
+          <ion-button type="submit" color="primary">
+           <span>
+             <ion-spinner color="primary"></ion-spinner>
+           </span> Connexion
+          </ion-button>
+        </div>
+      </form>
+    </ion-list>
+  </div>
   <app-explore-container name="Tab 3 page"></app-explore-container>
 </ion-content>

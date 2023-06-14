@@ -25,24 +25,18 @@ import java.util.Set;
     UserEntity map(SignUpDto userDto);
 
 
-    @Mapping(source = "username", target = "username")
-    @Mapping(source = "email", target = "email")
-    @Mapping(target = "roles", ignore = true)
-    @Mapping(target = "password", ignore = true)
-    @Mapping(target = "id", ignore = true)
-    void updateUserRole(SignUpDto userDto, @MappingTarget UserEntity entityToUpdate);
+ default UserEntity updateUserRole(UserEntity entityToUpdate, SignUpDto dtoUpdated,@Context IRoleRepository repo ) {
 
+     entityToUpdate
+             .setRoles(repo.findById(dtoUpdated.getIdRole())
+             .map(role -> {
+         Set<RoleEntity> roles = new HashSet<>();
+         roles.add(role);
+         return roles;
+     }).orElseThrow(() -> new NoSuchElementException("Role not found")));
 
-
-    @AfterMapping
-    default void mapRole(@MappingTarget UserEntity userToUpdate, Long idRole, @Context IRoleRepository repo) {
-
-        userToUpdate.setRoles(repo.findById(idRole).map(role -> {
-            Set<RoleEntity> roles = new HashSet<>();
-            roles.add(role);
-            return roles;
-        }).orElseThrow(() -> new NoSuchElementException("Role not found")));
-    }
+     return entityToUpdate;
+ }
 
 
 }
